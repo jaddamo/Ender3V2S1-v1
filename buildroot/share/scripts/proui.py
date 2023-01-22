@@ -15,11 +15,11 @@ MarlinEnv = env['MARLIN_FEATURES']
 marlin_manualmesh = _GetMarlinEnv(MarlinEnv, 'MESH_BED_LEVELING')
 marlin_automesh = _GetMarlinEnv(MarlinEnv, 'AUTO_BED_LEVELING_BILINEAR')
 
-if (marlin_manualmesh):
-   print("Manual Mesh Bed Leveling detected")
-   shutil.copy(libpath+'libproui_mbl.a', libpath+'libproui.a')
+if marlin_manualmesh:
+    print("Manual Mesh Bed Leveling detected")
+    shutil.copy(f'{libpath}libproui_mbl.a', f'{libpath}libproui.a')
 
-if(marlin_automesh):
-   print("Auto Mesh Bed Leveling detected")
-   shutil.copy(libpath+'libproui_abl.a', libpath+'libproui.a')
+if marlin_automesh:
+    print("Auto Mesh Bed Leveling detected")
+    shutil.copy(f'{libpath}libproui_abl.a', f'{libpath}libproui.a')
 

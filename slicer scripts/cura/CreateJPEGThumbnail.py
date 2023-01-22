@@ -42,21 +42,15 @@ class CreateJPEGThumbnail(Script):
             Logger.logException("w", "Failed to encode snapshot image")
 
     def _convertSnapshotToGcode(self, encoded_snapshot, width, height, chunk_size=78):
-        gcode = []
-
         encoded_snapshot_length = len(encoded_snapshot)
-        gcode.append(";")
-        gcode.append("; thumbnail begin {}x{} {}".format(
-            width, height, encoded_snapshot_length))
-
-        chunks = ["; {}".format(encoded_snapshot[i:i+chunk_size])
-                  for i in range(0, len(encoded_snapshot), chunk_size)]
+        gcode = [";", f"; thumbnail begin {width}x{height} {encoded_snapshot_length}"]
+        chunks = [
+            f"; {encoded_snapshot[i:i + chunk_size]}"
+            for i in range(0, len(encoded_snapshot), chunk_size)
+        ]
         gcode.extend(chunks)
 
-        gcode.append("; thumbnail end")
-        gcode.append(";")
-        gcode.append("")
-
+        gcode.extend(("; thumbnail end", ";", ""))
         return gcode
 
     def getSettingDataString(self):
@@ -96,8 +90,7 @@ class CreateJPEGThumbnail(Script):
         width = self.getSettingValueByKey("width")
         height = self.getSettingValueByKey("height")
 
-        snapshot = self._createSnapshot(width, height)
-        if snapshot:
+        if snapshot := self._createSnapshot(width, height):
             encoded_snapshot = self._encodeSnapshot(snapshot)
             snapshot_gcode = self._convertSnapshotToGcode(
                 encoded_snapshot, width, height)
